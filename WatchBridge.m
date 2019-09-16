@@ -45,6 +45,11 @@ RCT_EXPORT_MODULE()
   return self;
 }
 
++ (BOOL)requiresMainQueueSetup
+{
+   return YES;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Session State
 ////////////////////////////////////////////////////////////////////////////////
@@ -300,7 +305,17 @@ RCT_EXPORT_METHOD(updateApplicationContext:(NSDictionary<NSString *,id> *)contex
 ////////////////////////////////////////////////////////////////////////////////
 
 RCT_EXPORT_METHOD(getApplicationContext:(RCTResponseSenderBlock)callback) {
-  callback(@[self.session.applicationContext]);
+    // SEP: It seems that changes related to either React Native 59.10+ or iOS have caused this code to break
+    // if there is no application context. I'm not sure of the specifics but was able to solve the problem.
+    // I believe that an empty applicationContext previously came back as an empty dictionary, but now comes
+    // back as nil. The problem with a value of 'nil' is that 'callback' is being passed [nil], which
+    // React Native can't serialize. Somewhere along the line, a crash occurs with a vague error message.
+    NSDictionary* result = @{};
+
+    if (self.session.applicationContext != nil)
+      result = self.session.applicationContext;
+
+    callback(@[result]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
