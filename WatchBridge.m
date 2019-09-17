@@ -1,6 +1,6 @@
 #import "WatchBridge.h"
-#import <React/RCTConvert.h">
-#import <React/RCTEventDispatcher.h">
+#import <React/RCTConvert.h>
+#import <React/RCTEventDispatcher.h>
 
 static const NSString* EVENT_FILE_TRANSFER_ERROR            = @"WatchFileTransferError";
 static const NSString* EVENT_FILE_TRANSFER_FINISHED         = @"WatchFileTransferFinished";
